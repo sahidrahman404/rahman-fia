@@ -1,0 +1,13 @@
+/assets/fonts/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/assets/audio/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# Stated rather than sniffed, so a guest never gets a track the browser refuses
+# to decode because the extension was guessed wrong.
+/assets/audio/bubbly.opus
+  Content-Type: audio/ogg
+
+/assets/audio/bubbly.m4a
+  Content-Type: audio/mp4

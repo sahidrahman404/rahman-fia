@@ -1,0 +1,273 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<title>Share card source — Rahman &amp; Fia</title>
+
+<!--
+  Source for assets/img/og-cover.jpg, the 1200x630 card chat apps and timelines
+  show when the invitation is shared. Run tools/build-og.sh to re-render it.
+
+  Open this file directly in a browser to preview; it is authored at exactly
+  1200x630 CSS px and every asset path is relative, so nothing here depends on
+  where the repo is checked out.
+-->
+
+<style>
+  /* The invitation's own subsets, so the card is lettered in the real faces
+     rather than whatever the rendering machine happens to have installed. */
+  @font-face {
+    font-family: Caveat;
+    src: url('../assets/fonts/caveat-latin.woff2') format('woff2');
+    font-weight: 400 700; font-display: block;
+  }
+  @font-face {
+    font-family: Parisienne;
+    src: url('../assets/fonts/parisienne-latin.woff2') format('woff2');
+    font-weight: 400; font-display: block;
+  }
+  @font-face {
+    font-family: 'Patrick Hand';
+    src: url('../assets/fonts/patrick-hand-latin.woff2') format('woff2');
+    font-weight: 400; font-display: block;
+  }
+
+  :root {
+    --cream: #FDFAE0;
+    --amber: #F5A93C;
+    --terracotta: #C1471A;
+    --terracotta-soft: #D9713E;
+    --olive-deep: #7C9B2E;
+    --ink: #8A4A1E;
+
+    /* The artwork's own paper tone. The mount is painted this colour so the
+       jpg's baked-in background meets it without a visible seam. */
+    --frame-paper: #F8F1E1;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html, body { width: 1200px; height: 630px; }
+
+  body {
+    position: relative;
+    overflow: hidden;
+    background: var(--cream);
+    color: var(--ink);
+    font-family: 'Patrick Hand', sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Warm light from the top right, echoing the glow behind the couple. */
+  .glow {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(58% 78% at 78% 8%,  rgb(251 212 138 / .55) 0%, rgb(251 212 138 / 0) 62%),
+      radial-gradient(46% 62% at 12% 96%, rgb(162 194  79 / .20) 0%, rgb(162 194  79 / 0) 68%);
+  }
+
+  /* Hairline keyline, inset like the ruled border of a printed invitation. */
+  .keyline {
+    position: absolute;
+    inset: 20px;
+    border: 2px solid rgb(217 113 62 / .28);
+    border-radius: 18px;
+  }
+
+  .card {
+    position: relative;
+    height: 100%;
+    display: grid;
+    grid-template-columns: 430px 1fr;
+    align-items: center;
+    padding: 0 74px 0 62px;
+  }
+
+  /* ── Left: the frame, mounted like a print on the cream ground ────── */
+  .mount {
+    position: relative;
+    justify-self: center;
+    padding: 16px;
+    border-radius: 20px;
+    background: var(--frame-paper);
+    box-shadow:
+      0 0 0 2px rgb(245 169 60 / .55),
+      0 18px 34px -12px rgb(138 74 30 / .32);
+    rotate: -1.6deg;
+  }
+
+  /* frame-couple.jpg carries a wide cream margin around the drawn frame, which
+     would read as dead space at this size. The window below is the frame's own
+     bounding box (482x647 at +96+120 of the 672x900 original); .mount__frame is
+     scaled and offset in percentages so the crop holds at any width. */
+  .mount__art {
+    position: relative;
+    width: 330px;
+    aspect-ratio: 482 / 647;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  .mount__frame {
+    position: absolute;
+    width: 139.4191%;    /* 672/482 */
+    height: 139.1036%;   /* 900/647 */
+    left: -19.9170%;     /* -96/482 */
+    top: -18.5471%;      /* -120/647 */
+  }
+
+  /* The childhood photo sits in an arch laid over the drawn couple, exactly as
+     the closing screen does it (see .collage__arch in styles.css). The site
+     states these as % of a 210x300 box showing the jpg with `cover`; restated
+     here against the crop above, they land on the same pixels. The radii and
+     the inner padding are % of the arch itself, so they carry over unchanged. */
+  .arch {
+    position: absolute;
+    left: 12.4500%;
+    top: 13.4467%;
+    width: 74.9988%;
+    height: 76.6182%;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    padding-inline: 2.49%;
+    border-radius: 50% 50% 4.15% 4.15% / 36.46% 36.46% 3.03% 3.03%;
+    background: radial-gradient(ellipse 62.5% 62.5% at 50% 62%,
+                #FFE3B8 0%, #FDBE79 55%, #F7A55C 100%);
+    overflow: hidden;
+  }
+  .arch__photo { width: 100%; height: 82.02%; object-fit: cover; object-position: top; }
+
+  .mount__cat {
+    position: absolute;
+    right: -78px;
+    bottom: -30px;
+    width: 152px;
+    height: 100px;
+    rotate: 1.6deg;                          /* cancels the mount tilt, so the cat sits level */
+  }
+
+  /* ── Right: the words ─────────────────────────────────────────────── */
+  .copy {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 2px;
+  }
+
+  .copy__eyebrow {
+    font-family: Caveat, cursive;
+    font-size: 62px;
+    font-weight: 700;
+    line-height: 1.1;
+    color: var(--terracotta);
+  }
+
+  .copy__kicker {
+    font-size: 21px;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+    color: var(--olive-deep);
+    margin-top: 6px;
+  }
+
+  .names {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    margin-top: 22px;
+    font-family: Parisienne, cursive;
+    font-size: 52px;
+    line-height: 1.28;
+    color: var(--terracotta);
+  }
+  .names__amp {
+    font-family: Caveat, cursive;
+    font-size: 40px;
+    font-weight: 700;
+    line-height: 1;
+    color: var(--terracotta-soft);
+    margin: 2px 0;
+  }
+
+  .rule {
+    width: 264px;
+    height: 2px;
+    border-radius: 1px;
+    background: linear-gradient(90deg,
+      rgb(217 113 62 / 0) 0%, var(--terracotta-soft) 22%,
+      var(--terracotta-soft) 78%, rgb(217 113 62 / 0) 100%);
+    margin: 26px 0 20px;
+  }
+
+  .when {
+    font-family: Caveat, cursive;
+    font-size: 38px;
+    font-weight: 700;
+    line-height: 1.2;
+    color: var(--ink);
+  }
+  .where {
+    font-size: 22px;
+    line-height: 1.45;
+    color: var(--ink);
+    opacity: .8;
+    margin-top: 4px;
+  }
+
+  .rings {
+    width: 96px;
+    height: 45px;
+    margin-top: 22px;
+    opacity: .95;
+  }
+
+  /* ── Fluttering bits ──────────────────────────────────────────────── */
+  .flutter { position: absolute; }
+  .flutter--a { right: 84px; top: 62px;     width: 44px; height: 47px; rotate: -12deg; }
+  .flutter--b { left: 34px;  top: 96px;     width: 38px; height: 39px; rotate: 14deg; }
+  .flutter--c { right: 96px; bottom: 128px; width: 30px; height: 30px; rotate: -22deg; opacity: .8; }
+</style>
+</head>
+<body>
+  <div class="glow"></div>
+  <div class="keyline"></div>
+
+  <div class="card">
+    <div class="mount">
+      <div class="mount__art">
+        <img class="mount__frame" src="../assets/img/frame-couple.jpg" alt="">
+        <div class="arch">
+          <img class="arch__photo" src="../assets/img/couple-childhood.png" alt="">
+        </div>
+      </div>
+      <img class="mount__cat" src="../assets/svg/cat-bubu.svg" alt="">
+    </div>
+
+    <div class="copy">
+      <p class="copy__eyebrow">You're Invited</p>
+      <p class="copy__kicker">The Engagement Of</p>
+
+      <p class="names">
+        <span>Mohamad Sahid Rahman</span>
+        <span class="names__amp">&amp;</span>
+        <span>Khalfia Anisa Suad</span>
+      </p>
+
+      <span class="rule"></span>
+
+      <p class="when">Sabtu, 26 September 2026</p>
+      <p class="where">10.00 WIB · Rumah Bapak Suad, Tangerang</p>
+
+      <img class="rings" src="../assets/svg/rings.svg" alt="">
+    </div>
+  </div>
+
+  <img class="flutter flutter--a" src="../assets/svg/butterfly-a.svg" alt="">
+  <img class="flutter flutter--b" src="../assets/svg/butterfly-b.svg" alt="">
+  <img class="flutter flutter--c" src="../assets/svg/butterfly-b.svg" alt="">
+</body>
+</html>

@@ -1,0 +1,732 @@
+/* Rahman & Fia — engagement invitation
+   Ported from proposal-invitation.pen (4 frames, 390x844).
+
+   Sizing: the design column is 390px. The root font-size is 16px at and above
+   that width and scales with the viewport below it, so every design pixel can be
+   written as `px/16` rem and the whole composition scales as one piece.
+   Scoping: each screen owns one nested block in the `screens` layer. */
+
+@layer tokens, base, screens, motion;
+
+/* ── tokens ──────────────────────────────────────────────────────────── */
+@layer tokens {
+  @font-face {
+    font-family: Caveat;
+    src: url(assets/fonts/caveat-latin.woff2) format('woff2');
+    font-weight: 400 700; font-style: normal; font-display: swap;
+  }
+  @font-face {
+    font-family: Parisienne;
+    src: url(assets/fonts/parisienne-latin.woff2) format('woff2');
+    font-weight: 400; font-style: normal; font-display: swap;
+  }
+  @font-face {
+    font-family: 'Patrick Hand';
+    src: url(assets/fonts/patrick-hand-latin.woff2) format('woff2');
+    font-weight: 400; font-style: normal; font-display: swap;
+  }
+
+  :root {
+    --cream: #FDFAE0;
+    --cream-deep: #F8F2C8;
+    --amber: #F5A93C;
+    --amber-soft: #FBD48A;
+    --terracotta: #C1471A;
+    --terracotta-soft: #D9713E;
+    --olive: #A2C24F;
+    --olive-deep: #7C9B2E;
+    --ink: #8A4A1E;
+    --pill: #FDF3D2;
+
+    --font-script: Parisienne, 'Brush Script MT', cursive;
+    --font-hand: Caveat, 'Segoe Print', 'Bradley Hand', cursive;
+    --font-body: 'Patrick Hand', 'Comic Sans MS', ui-rounded, sans-serif;
+
+    --col: 24.375rem;   /* 390px */
+    --ease: cubic-bezier(.22, .61, .36, 1);
+  }
+}
+
+/* ── base ────────────────────────────────────────────────────────────── */
+@layer base {
+  *, *::before, *::after { box-sizing: border-box; }
+
+  html { font-size: 16px; }
+  @media (max-width: 389px) { html { font-size: calc(100vw / 24.375); } }
+
+  html, body { height: 100%; }
+
+  body {
+    margin: 0;
+    background: var(--cream);
+    color: var(--ink);
+    font-family: var(--font-body);
+    -webkit-text-size-adjust: 100%;
+    text-rendering: optimizeLegibility;
+  }
+
+  h1, h2, p, dl, dd, dt, ol, figure { margin: 0; }
+  ol { padding: 0; list-style: none; }
+  img { display: block; max-width: 100%; }
+
+  .deck {
+    width: 100%;
+    height: 100dvh;
+    overflow-y: auto;
+    overflow-x: hidden;
+    scroll-snap-type: y mandatory;
+    scroll-behavior: smooth;
+    overscroll-behavior-y: contain;
+    background: var(--cream);
+    scrollbar-width: none;
+  }
+  .deck::-webkit-scrollbar, .screen::-webkit-scrollbar { display: none; }
+  /* the cover gate: no scrolling until the invitation is opened.
+     Scoped to .js so a JS failure can never leave the deck unscrollable. */
+  .js body[data-open='false'] .deck { overflow-y: hidden; }
+
+  .screen {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: min(100%, var(--col));
+    height: 100dvh;
+    margin-inline: auto;
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+    overflow-x: hidden;
+    overflow-y: auto;
+    scrollbar-width: none;
+  }
+
+  .rule {
+    display: block;
+    width: 6rem;
+    height: 1.5px;
+    border-radius: 1px;
+    background: var(--terracotta-soft);
+  }
+  .rule--wide { width: 11.25rem; }
+
+  /* The music toggle is chrome, not part of any screen: it stays put while the
+     deck scrolls. Pinned to the top-right of the design column, falling back to
+     the viewport edge once the column fills the screen. */
+  .music {
+    position: fixed;
+    top: 1rem;
+    right: max(1rem, calc((100% - var(--col)) / 2 + 1rem));
+    z-index: 10;
+    display: grid;
+    place-items: center;
+    width: 2.375rem;
+    height: 2.375rem;
+    padding: 0;
+    color: var(--ink);
+    background: var(--amber-soft);
+    border: 1.5px solid var(--amber);
+    border-radius: 999px;
+    cursor: pointer;
+    box-shadow: 0 2px 0 rgb(193 71 26 / .18);
+  }
+  .music:hover { background: var(--amber); }
+  .music:active { transform: translateY(1px); box-shadow: none; }
+  .music__icon { width: 1.125rem; height: 1.125rem; }
+  .music[aria-pressed='true'] .music__slash { display: none; }
+  /* Same reasoning as .opener below: without JS there is nothing to toggle. */
+  html:not(.js) .music { display: none; }
+
+  :where(a, button):focus-visible {
+    outline: 2px solid var(--terracotta);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+}
+
+/* ── screens ─────────────────────────────────────────────────────────── */
+@layer screens {
+
+  /* Without JS the opener cannot do anything, so the scroll cue stands in for it.
+     This must live at the top level of the layer: inside .screen--intro, nesting
+     would prepend the parent and produce `.screen--intro html:not(.js) .opener`. */
+  html:not(.js) .opener { display: none; }
+
+  /* 01 Intro ---------------------------------------------------------- */
+  .screen--intro {
+    justify-content: center;
+    padding: 2.5rem 1.75rem;
+
+    .medallion {
+      position: relative;
+      width: 18.875rem;   /* 302 */
+      height: 24.5rem;    /* 392 */
+      max-width: 100%;
+    }
+    .medallion__plate { width: 100%; height: 100%; }
+
+    .medallion__title {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: -0.375rem;      /* design gap: -6 */
+      margin: 0;
+      font-family: var(--font-hand);
+      font-size: 3.25rem;  /* 52 */
+      font-weight: 700;
+      line-height: 1.27;
+      color: var(--terracotta);
+    }
+    .medallion__title span { display: block; margin-block: -0.1875rem; }
+
+    .medallion__flutter { position: absolute; }
+    .medallion__flutter--a { left: 12.3462rem; top: 2.233rem;  width: 2.5514rem; height: 2.745rem; }
+    .medallion__flutter--b { left: 3.375rem;   top: 17.0264rem; width: 2.334rem; height: 2.3533rem; }
+
+    .intro__cat {
+      position: absolute;
+      left: 1.5rem;
+      bottom: 7rem;        /* design y 632..732 of 844 */
+      width: 9.5rem;
+      height: 6.25rem;
+    }
+
+    .intro__foot {
+      position: absolute;
+      left: 0; right: 0;
+      bottom: 2.25rem;
+      height: 3.5rem;      /* design cue band: 752..808 */
+      display: grid;       /* button and cue share one cell; one fades out, one in */
+      place-items: center;
+      align-content: center;
+    }
+    .intro__foot > * { grid-area: 1 / 1; }
+
+    .opener {
+      font-family: var(--font-hand);
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--ink);
+      background: var(--amber-soft);
+      border: 1.5px solid var(--amber);
+      border-radius: 999px;
+      padding: 0.5rem 1.5rem;
+      cursor: pointer;
+      box-shadow: 0 2px 0 rgb(193 71 26 / .18);
+    }
+    .opener:hover { background: var(--amber); }
+    .opener:active { transform: translateY(1px); box-shadow: none; }
+
+    .cue {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.125rem;
+      color: var(--olive-deep);
+      pointer-events: none;
+    }
+    .cue__text { font-size: 0.875rem; }
+    .cue__chevron { width: 1.25rem; height: 1.25rem; }
+  }
+
+  /* 02 Proposer & Proposee -------------------------------------------- */
+  .screen--couple {
+    justify-content: space-between;
+    gap: 0.5rem;
+    padding: 1.5rem;
+
+    .flourish {
+      width: 100%;
+      height: 4.5625rem;
+      min-height: 0;
+      flex: 0 1 auto;
+      object-fit: contain;
+    }
+    .flourish--flipped { transform: scaleY(-1); }
+
+    .couple {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.875rem;
+      width: 100%;
+    }
+
+    .couple__eyebrow {
+      font-family: var(--font-hand);
+      font-size: 2.125rem;   /* 34 */
+      font-weight: 700;
+      line-height: 1.26;
+      color: var(--ink);
+      text-align: center;
+    }
+
+    .pair {
+      display: flex;
+      align-items: center;
+      gap: 0.875rem;
+      width: 100%;
+    }
+    .pair--reverse { flex-direction: row; }
+
+    .portrait {
+      position: relative;
+      flex: 0 0 auto;
+      width: 9.375rem;    /* 150 */
+      height: 11.625rem;  /* 186 */
+      border-radius: 0.5rem;
+      background: center / cover no-repeat;
+      overflow: hidden;
+    }
+    .pair:not(.pair--reverse) .portrait { background-image: url(assets/img/frame-groom.jpg); }
+    .pair--reverse .portrait          { background-image: url(assets/img/frame-bride.jpg); }
+
+    .portrait__photo { position: absolute; object-fit: cover; }
+    .portrait__photo--groom {
+      left: 1.0625rem; top: 1.65625rem;
+      width: 7.25rem; height: 8.40625rem;
+      border-radius: 3.625rem 3.625rem 0.25rem 0.25rem;
+    }
+    .portrait__photo--bride {
+      left: 1.4375rem; top: 1.71875rem;
+      width: 6.53125rem; height: 8.03125rem;
+      border-radius: 3.265625rem 3.265625rem 0.25rem 0.25rem;
+    }
+
+    .pair__name {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.125rem;
+      flex: 1 1 auto;
+      min-width: 0;
+      font-family: var(--font-script);
+      font-size: 1.625rem;   /* 26 */
+      line-height: 1.35;
+      color: var(--terracotta);
+      text-align: center;
+    }
+    /* the 96x1.5 rule sits under the surname in the design */
+    .pair__last { position: relative; padding-bottom: 0.25rem; }
+    .pair__last::after {
+      content: '';
+      position: absolute;
+      left: 50%; bottom: 0;
+      translate: -50% 0;
+      width: 6rem; height: 1.5px;
+      border-radius: 1px;
+      background: var(--terracotta-soft);
+    }
+
+    .rings {
+      position: relative;
+      width: 7.5rem;    /* 120 */
+      height: 3.5rem;   /* 56 */
+      flex: 0 0 auto;
+    }
+    .rings__art { width: 100%; height: 100%; }
+    .rings__cat {
+      position: absolute;
+      left: 8.8125rem;              /* design x 276, rings start at 135 */
+      /* top:50% minus half its own height (3.125rem) minus a touch more, so it
+         sits a little above center. Written as top rather than a centering
+         translate because translate is what the idle drift animates — a base
+         translate here would get clobbered by the drift's own 0%/100% values. */
+      top: calc(50% - 3.6875rem);
+      width: 4.375rem;
+      height: 6.25rem;
+    }
+  }
+
+  /* 03 Save The Date --------------------------------------------------- */
+  .screen--date {
+    gap: 0.5625rem;
+    padding: 1.25rem 1.5rem 1.1875rem;
+
+    .bow {
+      width: 100%;
+      height: 10.3125rem;   /* 165 */
+      min-height: 0;
+      flex: 0 1 auto;
+      object-fit: contain;
+    }
+
+    .date__head {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.375rem;
+      flex: 0 0 auto;
+    }
+    .date__title {
+      font-family: var(--font-hand);
+      font-size: 2.5rem;    /* 40 */
+      font-weight: 700;
+      letter-spacing: 1px;
+      line-height: 1.25;
+      color: var(--terracotta);
+    }
+
+    .date__month {
+      font-family: var(--font-hand);
+      font-size: 1.75rem;   /* 28 */
+      font-weight: 700;
+      line-height: 1.25;
+      color: var(--olive-deep);
+      flex: 0 0 auto;
+    }
+
+    .week {
+      display: flex;
+      align-items: center;
+      gap: 1px;
+      width: 100%;
+      padding-inline: 0.25rem;
+      flex: 0 0 auto;
+    }
+    .week__day {
+      flex: 1 1 0;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.125rem;
+      padding: 0.375rem 0.125rem;
+      border-radius: 1.5rem;
+      text-align: center;
+    }
+    .week__name { font-size: 0.6875rem; line-height: 1.35; color: var(--olive-deep); }
+    .week__num  { font-family: var(--font-hand); font-size: 1.125rem; font-weight: 700; line-height: 1.28; color: var(--ink); }
+
+    .week__day--on {
+      position: relative;
+      .week__name { color: var(--terracotta); }
+      .week__num  { font-size: 1.375rem; color: var(--terracotta); }
+    }
+    .week__day--on::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 1.5rem;
+      box-shadow: inset 0 0 0 2px var(--amber);
+      pointer-events: none;
+    }
+
+    .details {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+      flex: 0 0 auto;
+      text-align: center;
+    }
+    .details__label {
+      font-family: var(--font-hand);
+      font-size: 1.75rem;   /* 28 */
+      font-weight: 700;
+      line-height: 1.25;
+      color: var(--terracotta);
+    }
+    .details__label:not(:first-child) { margin-top: 0.875rem; }
+    .details__value {
+      font-size: 1.375rem;  /* 22 */
+      line-height: 1.32;
+      color: var(--ink);
+    }
+    .details__address {
+      display: block;
+      margin-top: 0.4375rem;
+      font-size: 1rem;
+      line-height: 1.35;
+    }
+
+    .maplink {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3125rem;
+      margin-top: 0.375rem;
+      padding: 0.25rem 0.75rem;
+      border: 1px solid var(--terracotta-soft);
+      border-radius: 999px;
+      background: var(--pill);
+      font-family: var(--font-hand);
+      font-size: 1.125rem;
+      font-weight: 700;
+      line-height: 1.28;
+      color: var(--terracotta);
+      text-decoration: none;
+    }
+    .maplink:hover { background: var(--cream-deep); }
+    .maplink__pin { width: 0.9375rem; height: 0.9375rem; flex: 0 0 auto; }
+
+    .table {
+      position: relative;
+      width: 100%;
+      height: 13.125rem;   /* 210 */
+      min-height: 0;
+      flex: 0 1 auto;
+      margin-top: auto;
+    }
+    .table__art { width: 100%; height: 100%; object-fit: contain; object-position: bottom; }
+    .table__cat {
+      position: absolute;
+      left: -0.625rem;
+      bottom: 1.5625rem;
+      width: 8rem;
+      height: 5.25rem;
+    }
+  }
+
+  /* 04 Closing Message ------------------------------------------------- */
+  .screen--closing {
+    justify-content: center;
+    gap: clamp(0.5rem, 2.4vh, 1.25rem);
+    /* 3.5rem clears the border's ornament band (14px inset + ~40px of curls).
+       With justify-content:center this leaves the 844px layout untouched. */
+    padding: 3.5rem 2.125rem;
+
+    .border {
+      position: absolute;
+      inset: 0.875rem;
+      width: calc(100% - 1.75rem);
+      height: calc(100% - 1.75rem);
+      pointer-events: none;
+    }
+
+    .closing__names {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      font-family: var(--font-script);
+      font-weight: 400;
+      line-height: 1.35;
+      color: var(--terracotta);
+      text-align: center;
+    }
+    .closing__name { font-size: 2.875rem; }   /* 46 */
+    .closing__amp  { font-size: 2.125rem; margin-block: -0.625rem; }
+
+    .collage {
+      position: relative;
+      width: auto;
+      height: 18.75rem;        /* 300; shrinks on short screens */
+      aspect-ratio: 210 / 300;
+      max-width: 100%;
+      min-height: 0;
+      flex: 0 1 auto;
+      border-radius: 0.5rem;
+      background: url(assets/img/frame-couple.jpg) center / cover no-repeat;
+    }
+
+    .collage__arch {
+      position: absolute;
+      left: 21.43%; top: 23%;          /* 45,69 of 210x300 */
+      width: 57.38%; height: 55.08%;   /* 120.5 x 165.25 */
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      padding-inline: 2.49%;
+      border-radius: 50% 50% 4.15% 4.15% / 36.46% 36.46% 3.03% 3.03%;
+      background: radial-gradient(ellipse 62.5% 62.5% at 50% 62%,
+                  #FFE3B8 0%, #FDBE79 55%, #F7A55C 100%);
+      overflow: hidden;
+    }
+    .collage__photo { width: 100%; height: 82.02%; object-fit: cover; object-position: top; }
+
+    .collage__cat {
+      position: absolute;
+      left: 82.86%; top: 69.33%;       /* 174,208 of 210x300 */
+      width: 35.24%; height: 37.33%;   /* 74 x 112 */
+    }
+
+    .closing__message {
+      width: 17.375rem;   /* 278 */
+      max-width: 100%;
+      font-size: 0.9375rem;
+      line-height: 1.4;
+      color: var(--ink);
+      text-align: center;
+    }
+    .closing__message p + p { margin-top: 1.4em; }
+  }
+}
+
+/* ── motion ──────────────────────────────────────────────────────────── */
+@layer motion {
+  .js [data-reveal] {
+    opacity: 0;
+    translate: 0 1.25rem;
+    transition: opacity .7s var(--ease), translate .7s var(--ease);
+    transition-delay: var(--delay, 0ms);
+  }
+  .js [data-reveal].is-visible { opacity: 1; translate: 0 0; }
+
+  /* the cover gate swap */
+  .opener, .cue { transition: opacity .45s var(--ease), translate .45s var(--ease); }
+  .js body[data-open='false'] .cue    { opacity: 0; translate: 0 0.5rem; }
+  .js body[data-open='true']  .opener { opacity: 0; translate: 0 -0.5rem; pointer-events: none; }
+
+  /* The toggle rides in with the invitation. `visibility` keeps it out of the tab
+     order while the gate is closed — the gate never re-closes, so it only ever
+     needs to animate the one way. */
+  .music { transition: opacity .45s var(--ease), translate .45s var(--ease); }
+  .js body[data-open='false'] .music { opacity: 0; translate: 0 -0.5rem; visibility: hidden; }
+
+  body[data-open='true'] .cue { animation: cue-bob 1.9s var(--ease) infinite; }
+  @keyframes cue-bob {
+    0%, 100% { translate: 0 0; }
+    50%      { translate: 0 0.375rem; }
+  }
+
+  /* ── screen 01 arrival ────────────────────────────────────────────────
+     Plays on load, no gesture required: plate, then title, then butterflies,
+     then the cat. Each part hands off to its idle loop by listing the loop
+     after the entrance with a delay — when two animations touch the same
+     property the later one wins, so the loop takes over the moment it starts
+     and the entrance's `both` fill holds everything until then.
+
+     Nothing here is set in the base rules: with animations off (reduced
+     motion, no CSS animation support) every element is simply already in
+     place, so the invitation can never get stuck invisible. */
+  .medallion__plate {
+    animation: plate-in .45s cubic-bezier(.2, .9, .3, 1.25) .05s both,
+               plate-shake .42s ease-in-out .4s;
+  }
+  @keyframes plate-in {
+    from { opacity: 0; scale: .9; }
+    to   { opacity: 1; scale: 1; }
+  }
+  /* Rotation only, so it layers over plate-in's scale without fighting it. */
+  @keyframes plate-shake {
+    0%, 100% { rotate: 0deg; }
+    18%      { rotate: -1.7deg; }
+    44%      { rotate: 1.2deg; }
+    70%      { rotate: -.55deg; }
+    88%      { rotate: .22deg; }
+  }
+
+  .medallion__title {
+    animation: title-in .48s var(--ease) .38s both,
+               title-shake .38s ease-in-out .8s;
+  }
+  @keyframes title-in {
+    from { opacity: 0; translate: -2.25rem 1.75rem; scale: .94; }
+    to   { opacity: 1; translate: 0 0; scale: 1; }
+  }
+  @keyframes title-shake {
+    0%, 100% { rotate: 0deg; }
+    22%      { rotate: -1.5deg; }
+    52%      { rotate: 1.1deg; }
+    78%      { rotate: -.45deg; }
+  }
+
+  /* Each butterfly drifts in along the diagonal it sits on — a from the upper
+     right, b from the lower left — and then picks up its idle flutter. */
+  .medallion__flutter--a {
+    animation: flutter-in-a .5s var(--ease) .72s both,
+               flutter-a 6.5s ease-in-out 1.25s infinite;
+  }
+  .medallion__flutter--b {
+    animation: flutter-in-b .5s var(--ease) .82s both,
+               flutter-b 7.5s ease-in-out 1.35s infinite;
+  }
+  @keyframes flutter-in-a {
+    from { opacity: 0; translate: 2.5rem -2.5rem; rotate: 20deg; scale: .78; }
+    to   { opacity: 1; translate: 0 0; rotate: 0deg; scale: 1; }
+  }
+  @keyframes flutter-in-b {
+    from { opacity: 0; translate: -2.25rem 2.25rem; rotate: -18deg; scale: .78; }
+    to   { opacity: 1; translate: 0 0; rotate: 0deg; scale: 1; }
+  }
+
+  /* Bubu walks in from off the right edge of the design column. 14rem clears
+     it: the cat's right edge sits at 176 of the 390-wide column, and the
+     column clips its overflow, so she is out of sight at the start. */
+  .intro__cat {
+    animation: cat-in .58s var(--ease) .92s both,
+               cat-breathe 5.5s ease-in-out 1.5s infinite,
+               cat-drift 6.8s ease-in-out 1.5s infinite;
+  }
+  @keyframes cat-in {
+    from { opacity: 0; translate: 14rem 0; rotate: 5deg; }
+    40%  { opacity: 1; }
+    to   { opacity: 1; translate: 0 0; rotate: 0deg; }
+  }
+  /* The butterflies' motion, slowed and shrunk to a cat's weight. */
+  @keyframes cat-drift {
+    0%, 100% { translate: 0 0; rotate: 0deg; }
+    50%      { translate: -.2rem -.35rem; rotate: -2.2deg; }
+  }
+
+  /* Last in: the button arrives as the cat settles, rising as it will later
+     leave. `backwards` and not `both` on purpose — the fill must end with the
+     animation so the declared values, and with them the gate's fade-out
+     transition below, take the property back. A forwards fill would outrank
+     `data-open='true'`'s opacity and pin the button on screen for good.
+     `visibility` keeps it untappable and out of the tab order until it shows,
+     rather than leaving an invisible live button over the intro. */
+  .opener { animation: opener-in .38s var(--ease) 1.42s backwards; }
+  @keyframes opener-in {
+    from { opacity: 0; translate: 0 .625rem; visibility: hidden; }
+    to   { opacity: 1; translate: 0 0; visibility: visible; }
+  }
+
+  @keyframes flutter-a {
+    0%, 100% { translate: 0 0;        rotate: 0deg; }
+    50%      { translate: -.15rem -.4rem; rotate: -5deg; }
+  }
+  @keyframes flutter-b {
+    0%, 100% { translate: 0 0;      rotate: 0deg; }
+    50%      { translate: .2rem -.3rem; rotate: 6deg; }
+  }
+
+  /* .intro__cat is absent on purpose — it carries its own arrival above, which
+     already ends in this same breathe and drift. */
+  .rings__cat {
+    animation: cat-breathe 5.5s ease-in-out .4s infinite,
+               cat-drift 6.8s ease-in-out .4s infinite;
+  }
+  .table__cat {
+    animation: cat-breathe 5.5s ease-in-out .9s infinite,
+               cat-drift 6.8s ease-in-out .9s infinite;
+  }
+  .collage__cat {
+    animation: cat-breathe 5.5s ease-in-out 1.4s infinite,
+               cat-drift 6.8s ease-in-out 1.4s infinite;
+  }
+  .intro__cat, .rings__cat, .table__cat, .collage__cat { transform-origin: bottom center; }
+  @keyframes cat-breathe {
+    0%, 100% { scale: 1 1; }
+    50%      { scale: 1.012 .99; }
+  }
+
+  /* Screen 03: the amber ring around "26" drops in oversized and settles,
+     then hands off to a slow idle pulse — same "entrance, then the loop
+     takes over" idiom as .intro__cat above. ring-pulse's .95s delay is
+     ring-in's own delay + duration (.45s + .5s), so it takes over the
+     instant ring-in ends. */
+  .js .week[data-reveal].is-visible .week__day--on::after {
+    animation: ring-in .5s cubic-bezier(.2, .9, .3, 1.25) .45s both,
+               ring-pulse 3.2s ease-in-out .95s infinite;
+  }
+  @keyframes ring-in {
+    from { opacity: 0; scale: 1.7; }
+    to   { opacity: 1; scale: 1; }
+  }
+  @keyframes ring-pulse {
+    0%, 100% { scale: 1; }
+    50%      { scale: 1.08; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .deck { scroll-behavior: auto; }
+    .js [data-reveal] { opacity: 1; translate: none; transition: none; }
+    .opener, .cue, .music, .medallion__plate, .medallion__title,
+    .medallion__flutter, .intro__cat,
+    .rings__cat, .table__cat, .collage__cat,
+    .week__day--on::after { animation: none; transition: none; }
+    .js body[data-open='false'] .cue { opacity: 1; translate: none; }
+  }
+}

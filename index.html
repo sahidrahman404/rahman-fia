@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Rahman &amp; Fia — Undangan Pertunangan</title>
+<meta name="description" content="Undangan pertunangan Mohamad Sahid Rahman &amp; Khalfia Anisa Suad — Sabtu, 26 September 2026 di Tangerang.">
+<meta name="theme-color" content="#FDFAE0">
+<link rel="canonical" href="https://engagement-party-invitation.cookbooks.workers.dev/">
+
+<!-- Open Graph. Every URL here is absolute on purpose: WhatsApp, Facebook and
+     Telegram resolve og:image against nothing at all, so a relative path is
+     fetched as-is, 404s, and the link renders as a bare grey box. -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Rahman &amp; Fia">
+<meta property="og:locale" content="id_ID">
+<meta property="og:url" content="https://engagement-party-invitation.cookbooks.workers.dev/">
+<meta property="og:title" content="Rahman &amp; Fia — Undangan Pertunangan">
+<meta property="og:description" content="Sabtu, 26 September 2026 · 10.00 WIB · Rumah Bapak Suad, Tangerang. Kami memohon doa dan restu Anda.">
+
+<!-- 1200×630 (1.91:1) is the ratio every chat app and timeline crops to, so the
+     card is composed at that size rather than letting a portrait photo get
+     centre-cropped through the couple's faces. Declaring the dimensions lets
+     a scraper reserve the right box before the image finishes downloading. -->
+<meta property="og:image" content="https://engagement-party-invitation.cookbooks.workers.dev/assets/img/og-cover.jpg">
+<meta property="og:image:type" content="image/jpeg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Undangan pertunangan Mohamad Sahid Rahman dan Khalfia Anisa Suad, Sabtu 26 September 2026.">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Rahman &amp; Fia — Undangan Pertunangan">
+<meta name="twitter:description" content="Sabtu, 26 September 2026 · 10.00 WIB · Rumah Bapak Suad, Tangerang. Kami memohon doa dan restu Anda.">
+<meta name="twitter:image" content="https://engagement-party-invitation.cookbooks.workers.dev/assets/img/og-cover.jpg">
+<meta name="twitter:image:alt" content="Undangan pertunangan Mohamad Sahid Rahman dan Khalfia Anisa Suad, Sabtu 26 September 2026.">
+
+<link rel="preload" href="assets/fonts/caveat-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/parisienne-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/patrick-hand-latin.woff2" as="font" type="font/woff2" crossorigin>
+<!-- Marks that JS is running. Everything that hides content (the cover gate, the
+     reveal-on-scroll start state) is scoped to .js, so with JS off or broken the
+     invitation still renders in full and scrolls normally. -->
+<script>document.documentElement.classList.add('js')</script>
+<link rel="stylesheet" href="styles.css">
+<!-- Icons, built by tools/build-icons.sh. The .ico and the touch icon sit at the
+     site root because browsers and iOS request those paths by name whether or
+     not a <link> points at them.
+
+     The SVG is the head crop rather than the whole cat: a browser that
+     understands it prefers it over every .ico entry, and it gets drawn at 16px
+     in the tab, which is exactly the size the full landscape drawing turns to
+     mush at. The touch icon keeps the whole animal — it renders large. -->
+<link rel="icon" href="/favicon.ico" sizes="48x48 32x32 16x16">
+<link rel="icon" href="assets/svg/icon-tab.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+</head>
+
+<body data-open="false">
+<main class="deck" id="deck">
+
+  <!-- ── 01 Intro ─────────────────────────────────────────────────── -->
+  <section class="screen screen--intro" aria-labelledby="intro-title">
+    <!-- No data-reveal here: screen 01 is on screen before anyone can scroll, so
+         its parts are choreographed on load in the motion layer instead. -->
+    <div class="medallion">
+      <img class="medallion__plate" src="assets/svg/medallion.svg" alt="" aria-hidden="true">
+      <h1 class="medallion__title" id="intro-title"><span>You're</span><span>Invited</span></h1>
+      <img class="medallion__flutter medallion__flutter--a" src="assets/svg/butterfly-a.svg" alt="" aria-hidden="true">
+      <img class="medallion__flutter medallion__flutter--b" src="assets/svg/butterfly-b.svg" alt="" aria-hidden="true">
+    </div>
+
+    <img class="intro__cat" src="assets/svg/cat-bubu.svg" alt="" aria-hidden="true">
+
+    <div class="intro__foot">
+      <button class="opener" type="button" id="opener">Buka Undangan</button>
+      <p class="cue" id="cue" aria-hidden="true">
+        <span class="cue__text">geser ke bawah</span>
+        <svg class="cue__chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+             stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="m6 9 6 6 6-6"/>
+        </svg>
+      </p>
+    </div>
+  </section>
+
+  <!-- ── 02 Proposer & Proposee ───────────────────────────────────── -->
+  <section class="screen screen--couple" aria-labelledby="couple-title">
+    <img class="flourish" src="assets/svg/flourish.svg" alt="" aria-hidden="true" data-reveal>
+
+    <div class="couple">
+      <h2 class="couple__eyebrow" id="couple-title" data-reveal>The Engagement Of</h2>
+
+      <div class="pair" data-reveal>
+        <figure class="portrait">
+          <img class="portrait__photo portrait__photo--groom" src="assets/img/rahman.jpg"
+               alt="Mohamad Sahid Rahman" width="116" height="135" decoding="async">
+        </figure>
+        <p class="pair__name"><span class="pair__first">Mohamad Sahid</span><span class="pair__last">Rahman</span></p>
+      </div>
+
+      <div class="rings" data-reveal>
+        <img class="rings__art" src="assets/svg/rings.svg" alt="" aria-hidden="true">
+        <img class="rings__cat" src="assets/svg/cat-mumu.svg" alt="" aria-hidden="true">
+      </div>
+
+      <div class="pair pair--reverse" data-reveal>
+        <p class="pair__name"><span class="pair__first">Khalfia Anisa</span><span class="pair__last">Suad</span></p>
+        <figure class="portrait">
+          <img class="portrait__photo portrait__photo--bride" src="assets/img/fia.jpg"
+               alt="Khalfia Anisa Suad" width="105" height="129" decoding="async">
+        </figure>
+      </div>
+    </div>
+
+    <img class="flourish flourish--flipped" src="assets/svg/flourish.svg" alt="" aria-hidden="true" data-reveal>
+  </section>
+
+  <!-- ── 03 Save The Date ─────────────────────────────────────────── -->
+  <section class="screen screen--date" aria-labelledby="date-title">
+    <img class="bow" src="assets/svg/ribbon-bow.svg" alt="" aria-hidden="true" data-reveal>
+
+    <div class="date__head" data-reveal>
+      <h2 class="date__title" id="date-title">Save The Date</h2>
+      <span class="rule rule--wide" aria-hidden="true"></span>
+    </div>
+
+    <p class="date__month" data-reveal>September 2026</p>
+
+    <ol class="week" data-reveal>
+      <li class="week__day"><span class="week__name">Senin</span><span class="week__num">21</span></li>
+      <li class="week__day"><span class="week__name">Selasa</span><span class="week__num">22</span></li>
+      <li class="week__day"><span class="week__name">Rabu</span><span class="week__num">23</span></li>
+      <li class="week__day"><span class="week__name">Kamis</span><span class="week__num">24</span></li>
+      <li class="week__day"><span class="week__name">Jumat</span><span class="week__num">25</span></li>
+      <li class="week__day week__day--on" aria-current="date"><span class="week__name">Sabtu</span><span class="week__num">26</span></li>
+      <li class="week__day"><span class="week__name">Minggu</span><span class="week__num">27</span></li>
+    </ol>
+
+    <dl class="details" data-reveal>
+      <dt class="details__label">Pukul :</dt>
+      <dd class="details__value">10.00 WIB - Selesai</dd>
+
+      <dt class="details__label">Lokasi :</dt>
+      <dd class="details__value">
+        Rumah Bapak Suad
+        <span class="details__address">Komp. Ciledug Indah 2, Jl. Delima 2 Blok C XI No. 18, Kel. Pedurenan, Kec. Karang Tengah, Kota Tangerang</span>
+        <a class="maplink"
+           href="https://www.google.com/maps/place/6%C2%B013'03.1%22S+106%C2%B041'55.4%22E/@-6.2175354,106.6986879,16a,75y,94.91h,89.61t/data=!3m7!1e1!3m5!1srwnL8nF0_SuLijO3YYS6RA!2e0!6shttps:%2F%2Fstreetviewpixels-pa.googleapis.com%2Fv1%2Fthumbnail%3Fcb_client%3Dmaps_sv.tactile%26w%3D900%26h%3D600%26pitch%3D0.39464446131802333%26panoid%3DrwnL8nF0_SuLijO3YYS6RA%26yaw%3D94.9144198672846!7i16384!8i8192!4m4!3m3!8m2!3d-6.21752!4d106.6987256!18m1!1e1?entry=ttu&amp;g_ep=EgoyMDI2MDkwMi4wIKXMDSoASAFQAw%3D%3D"
+           target="_blank" rel="noopener noreferrer">
+          <svg class="maplink__pin" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/>
+            <circle cx="12" cy="10" r="3"/>
+          </svg>
+          Lihat Lokasi di Peta
+        </a>
+      </dd>
+    </dl>
+
+    <div class="table" data-reveal>
+      <img class="table__art" src="assets/svg/table.svg" alt="" aria-hidden="true">
+      <img class="table__cat" src="assets/svg/cat-cemplung.svg" alt="" aria-hidden="true">
+    </div>
+  </section>
+
+  <!-- ── 04 Closing Message ───────────────────────────────────────── -->
+  <section class="screen screen--closing" aria-labelledby="closing-title">
+    <img class="border" src="assets/svg/scroll-border.svg" alt="" aria-hidden="true">
+
+    <h2 class="closing__names" id="closing-title" data-reveal>
+      <span class="closing__name">Rahman</span>
+      <span class="closing__amp">&amp;</span>
+      <span class="closing__name">Fia</span>
+    </h2>
+
+    <div class="collage" data-reveal>
+      <div class="collage__arch">
+        <img class="collage__photo" src="assets/img/couple-childhood.png"
+             alt="Rahman dan Fia semasa kecil" width="115" height="136" decoding="async">
+      </div>
+      <img class="collage__cat" src="assets/svg/cat-sisil.svg" alt="" aria-hidden="true">
+    </div>
+
+    <div class="closing__message" data-reveal>
+      <p>Sebuah babak baru dalam kehidupan kami akan segera dimulai, dan kami ingin berbagi momen istimewa ini bersama orang-orang terkasih.</p>
+      <p>Kami memohon doa dan restu Anda untuk langkah baru yang akan kami tempuh. Kehadiran Anda akan menjadi kebahagiaan dan kenangan yang sangat berarti bagi kami.</p>
+    </div>
+  </section>
+
+</main>
+
+<!-- Music. Playback starts inside the "Buka Undangan" click — the user gesture every
+     browser requires before audio may begin — so there is no muted-autoplay trick and
+     no "tap to enable sound" nag. preload="none" keeps the track off the wire until
+     then: a guest who never opens the invitation never downloads it. -->
+<button class="music" type="button" id="music" aria-pressed="true" aria-label="Matikan musik">
+  <svg class="music__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+       stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    <path d="M9 18V5l12-2v13"/>
+    <circle cx="6" cy="18" r="3"/>
+    <circle cx="18" cy="16" r="3"/>
+    <line class="music__slash" x1="3" y1="3" x2="21" y2="21"/>
+  </svg>
+</button>
+
+<audio id="song" loop preload="none">
+  <source src="assets/audio/bubbly.opus" type="audio/ogg; codecs=opus">
+  <source src="assets/audio/bubbly.m4a" type="audio/mp4; codecs=mp4a.40.2">
+</audio>
+
+<script src="main.js"></script>
+</body>
+</html>

@@ -1,0 +1,10 @@
+# machine-local Claude Code permissions, not shared
+.claude/settings.local.json
+
+# the 320 kbps audio master — 7.9 MB, and 12x the weight of the whole site.
+# assets/audio/ holds the encodes that actually ship; see the README there.
+/assets/song.mp3
+
+# OS cruft
+.DS_Store
+Thumbs.db
